@@ -15,16 +15,15 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-static qint64 number=-1;
+static double number=-1.1;
 
 void MainWindow::SetNumber(int num){
     QString text = ui->textBrowser->toPlainText();
     if(num==0){
         if(text.isEmpty()){
             ui->textBrowser->setText(ui->textBrowser->toPlainText()+"0");
-            number=0;
         }
-        else if(number!=0&&number!=-1){
+        else if(number!=0&&number!=-1.1){
             ui->textBrowser->setText(ui->textBrowser->toPlainText()+"0");
             number=number*10;
             qDebug()<<number;
@@ -34,15 +33,20 @@ void MainWindow::SetNumber(int num){
         if(number==0){
             text.chop(1);
             ui->textBrowser->setText(text+QString::number(num));
+            number=num;
+        }
+        else if(number==-1.1){
+            number=0;
+            ui->textBrowser->setText(ui->textBrowser->toPlainText()+QString::number(num));
         }
         else{
             ui->textBrowser->setText(ui->textBrowser->toPlainText()+QString::number(num));
         }
-        if(number<0)number=0;
+
         number=number*10+num;
     }
+    qDebug()<<"number:"<<number;
 }
-
 QVector<int> arr;
 QString op;
 
@@ -58,9 +62,9 @@ void PrintArr(QVector<T>& a){
     }
 }
 void  MainWindow::SetOp(char sop,char sop1,char sop2){
-    if(number>0)
+    if(number!=-1.1)
         arr.push_back(number);
-    number=-1;
+    number=-1.1;
     QString text = ui->textBrowser->toPlainText();
     if(!text.isEmpty()){
         if(text.back()==sop1||text.back()==sop2){
